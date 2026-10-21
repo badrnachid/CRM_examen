@@ -24,6 +24,10 @@ app.post("/api/clients", async (req, res) => {
     res.json(await Client.create(req.body));
 });
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log("Serveur lancé");
-});
+if (require.main === module) {
+    app.listen(process.env.PORT || 3000, () => {
+        console.log("Serveur lancé");
+    });
+}
+
+module.exports = app;
