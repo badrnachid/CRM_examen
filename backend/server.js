@@ -4,20 +4,26 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
 app.use(cors());
 app.use(express.json());
 
-mongoose
-    .connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB connecté"))
-    .catch((err) => console.error("Erreur MongoDB :", err.message));
+    .catch((err) => console.error(err.message));
 
-app.get("/", (req, res) => {
-    res.send("Serveur CRM actif");
+const Client = mongoose.model("Client", {
+    nom: String,
+    email: String,
 });
 
-app.listen(PORT, () => {
-    console.log(`Serveur lancé sur http://localhost:${PORT}`);
+app.get("/api/clients", async (req, res) => {
+    res.json(await Client.find());
+});
+
+app.post("/api/clients", async (req, res) => {
+    res.json(await Client.create(req.body));
+});
+
+app.listen(process.env.PORT || 3000, () => {
+    console.log("Serveur lancé");
 });
