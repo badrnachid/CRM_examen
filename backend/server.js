@@ -16,6 +16,10 @@ const Client = mongoose.model("Client", {
     email: String,
 });
 
+app.get("/", (req, res) => {
+    res.send("Backend CRM Badr actif ✅");
+});
+
 app.get("/api/clients", async (req, res) => {
     res.json(await Client.find());
 });
